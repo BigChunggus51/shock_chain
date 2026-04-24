@@ -1,0 +1,75 @@
+# ============================================================
+# Shock Catalog — Disruption Scenarios
+# ============================================================
+# Each shock has:
+#   - probability_per_step: chance of triggering at each epoch
+#   - duration_steps: how long the shock persists
+#   - params: shock-specific parameters
+#   - affected_echelons: which echelons are impacted ("all" or list)
+
+shocks:
+  demand_surge:
+    description: "End-customer demand spikes dramatically"
+    probability_per_step: 0.02
+    duration_steps: 14
+    params:
+      demand_multiplier: 3.0
+    affected_echelons: ["retailer"]
+
+  supplier_outage:
+    description: "Primary raw material supplier goes offline"
+    probability_per_step: 0.005
+    duration_steps: 30
+    params:
+      supplier_capacity_override: 0
+    affected_echelons: ["factory"]
+
+  logistics_bottleneck:
+    description: "Shipping and transportation delays double"
+    probability_per_step: 0.01
+    duration_steps: 21
+    params:
+      lead_time_multiplier: 2.0
+    affected_echelons: "all"
+
+  quality_recall:
+    description: "Defective batch discovered — inventory scrapped"
+    probability_per_step: 0.003
+    duration_steps: 1
+    params:
+      inventory_scrap_fraction: 0.2
+    affected_echelons: ["warehouse"]
+
+  port_congestion:
+    description: "Major port congestion causes cascading delays"
+    probability_per_step: 0.008
+    duration_steps: 28
+    params:
+      lead_time_multiplier: 2.5
+      supplier_capacity_multiplier: 0.5
+    affected_echelons: "all"
+
+# --- Scenario Presets (for deterministic what-if analysis) ---
+scenario_presets:
+  calm:
+    description: "No shocks — baseline performance"
+    active_shocks: []
+
+  single_surge:
+    description: "One demand surge at step 60"
+    scheduled_shocks:
+      - type: "demand_surge"
+        trigger_step: 60
+
+  cascading_crisis:
+    description: "Supplier outage followed by demand surge"
+    scheduled_shocks:
+      - type: "supplier_outage"
+        trigger_step: 30
+      - type: "demand_surge"
+        trigger_step: 50
+
+  worst_case:
+    description: "All shocks active with higher probability"
+    probability_multiplier: 3.0
+    active_shocks: ["demand_surge", "supplier_outage", "logistics_bottleneck", "quality_recall", "port_congestion"]

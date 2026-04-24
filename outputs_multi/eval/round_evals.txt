@@ -1,0 +1,5 @@
+Round 1: mean_reward=-67858.64, std=4148.96
+Round 2: mean_reward=-76546.77, std=4707.43
+Round 3: mean_reward=-84500.69, std=13490.66
+Round 4: mean_reward=-80512.91, std=6873.61
+Round 5: mean_reward=-100553.65, std=10369.89

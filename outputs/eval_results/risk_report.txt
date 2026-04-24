@@ -1,0 +1,25 @@
+============================================================
+SUPPLY CHAIN RISK ANALYSIS REPORT
+============================================================
+
+Simulations run: 100
+Mean total reward: -885.7 ± 314.3
+Mean shocks per episode: 13.9
+
+--- RETAILER ---
+  Mean fill rate:    77.3%
+  Stockout probability: 100.0%
+  Mean stockout days:   130.3
+  Worst-case backlog:   4453 units
+
+--- WAREHOUSE ---
+  Mean fill rate:    100.0%
+  Stockout probability: 0.0%
+  Mean stockout days:   0.0
+  Worst-case backlog:   0 units
+
+--- FACTORY ---
+  Mean fill rate:    100.0%
+  Stockout probability: 0.0%
+  Mean stockout days:   0.0
+  Worst-case backlog:   0 units

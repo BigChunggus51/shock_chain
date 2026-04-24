@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supply Chain Digital Twin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="background-mesh"></div>
+    
+    <div class="container">
+        <header class="glass-panel">
+            <div class="header-content">
+                <div>
+                    <h1>Industry 4.0 Supply Chain Twin</h1>
+                    <p>AI-Driven Resilience & Bullwhip Mitigation</p>
+                </div>
+                <div class="controls">
+                    <div class="control-group">
+                        <label>AI Policy</label>
+                        <select id="policySelect">
+                            <option value="drl">DRL Agent (PPO)</option>
+                            <option value="base_stock">Base-Stock Heuristic</option>
+                            <option value="beer_game">Beer Game Heuristic</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Disruption Scenario</label>
+                        <select id="scenarioSelect">
+                            <option value="stochastic">Constant Stochastic Noise</option>
+                            <option value="single_surge">Single Demand Surge</option>
+                            <option value="cascading_crisis">Cascading Crisis (Supplier + Surge)</option>
+                            <option value="worst_case">Worst Case (All Shocks)</option>
+                        </select>
+                    </div>
+                    <button id="runBtn" class="btn-primary">Simulate</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card glass-panel">
+                <h3>Total Reward</h3>
+                <div class="stat-value" id="rewardVal">--</div>
+            </div>
+            <div class="stat-card glass-panel">
+                <h3>Retailer Stockout Days</h3>
+                <div class="stat-value" id="stockoutVal">--</div>
+            </div>
+            <div class="stat-card glass-panel">
+                <h3>Factory Bullwhip Ratio</h3>
+                <div class="stat-value" id="bullwhipVal">--</div>
+            </div>
+        </div>
+
+        <div class="charts-container">
+            <div class="chart-wrapper glass-panel">
+                <h2>Retailer Inventory vs Backlog</h2>
+                <canvas id="inventoryChart"></canvas>
+            </div>
+            <div class="chart-wrapper glass-panel">
+                <h2>Supply Chain Bullwhip Effect (Orders)</h2>
+                <canvas id="orderChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+[project]
+name = "supply-chain-shock-sim"
+version = "0.1.0"
+description = "Supply Chain Shock Simulation powered by Deep Reinforcement Learning"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "gymnasium>=0.29",
+    "stable-baselines3>=2.3",
+    "pettingzoo>=1.24",
+    "simpy>=4.1",
+    "numpy>=1.26",
+    "pandas>=2.2",
+    "matplotlib>=3.8",
+    "seaborn>=0.13",
+    "pyyaml>=6.0",
+    "tensorboard>=2.16",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=4.1",
+    "ruff>=0.3",
+]
+tracking = [
+    "wandb>=0.16",
+]
+
+[build-system]
+requires = ["setuptools>=69.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

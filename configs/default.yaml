@@ -1,0 +1,56 @@
+# ============================================================
+# Supply Chain Shock Simulation — Default Configuration
+# ============================================================
+
+# --- Environment Parameters ---
+environment:
+  num_skus: 1                    # Start with single SKU for MVP
+  epoch_length: 1                # SimPy time units per decision epoch (1 event per decision)
+  max_episode_steps: 365         # 1 year of daily decisions
+  initial_inventory: 500         # Starting inventory at each echelon
+  max_order_quantity: 500        # Upper bound on order action
+  mean_demand: 50                # Poisson mean for base customer demand
+  demand_std: 10                 # Std dev for demand noise
+  base_lead_time: 5              # Mean lead time in epochs (days)
+  lead_time_std: 1.5             # Lead time variability
+  max_supplier_capacity: 300     # Max units the external supplier can ship per epoch
+  warehouse_capacity: 2000       # Max storage capacity per echelon
+
+# --- Reward Coefficients ---
+reward:
+  stockout_penalty: 10.0         # α — dominant penalty
+  holding_cost: 1.0              # β — moderate
+  expedite_cost: 3.0             # γ — expensive
+  order_cost: 0.5                # δ — low, ordering is normal
+  service_bonus: 5.0             # λ — incentivize fill rate
+  stability_penalty: 2.0         # μ — anti-Bullwhip
+
+# --- Training Hyperparameters ---
+training:
+  algorithm: "PPO"
+  total_timesteps: 500_000
+  learning_rate: 0.0003
+  batch_size: 64
+  n_steps: 2048
+  gamma: 0.99                    # Discount factor
+  gae_lambda: 0.95
+  clip_range: 0.2
+  ent_coef: 0.01                 # Entropy coefficient for exploration
+  n_epochs: 10
+  seed: 42
+  log_interval: 10
+  eval_freq: 10_000
+  eval_episodes: 20
+
+# --- Network Topology ---
+topology:
+  echelons:
+    - name: "retailer"
+      type: "retailer"
+      upstream: "warehouse"
+    - name: "warehouse"
+      type: "warehouse"
+      upstream: "factory"
+    - name: "factory"
+      type: "factory"
+      upstream: "external"       # External raw material supplier

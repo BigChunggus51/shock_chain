@@ -1,0 +1,106 @@
+Metadata-Version: 2.4
+Name: supply-chain-shock-sim
+Version: 0.1.0
+Summary: Supply Chain Shock Simulation powered by Deep Reinforcement Learning
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: gymnasium>=0.29
+Requires-Dist: stable-baselines3>=2.3
+Requires-Dist: pettingzoo>=1.24
+Requires-Dist: simpy>=4.1
+Requires-Dist: numpy>=1.26
+Requires-Dist: pandas>=2.2
+Requires-Dist: matplotlib>=3.8
+Requires-Dist: seaborn>=0.13
+Requires-Dist: pyyaml>=6.0
+Requires-Dist: tensorboard>=2.16
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.1; extra == "dev"
+Requires-Dist: ruff>=0.3; extra == "dev"
+Provides-Extra: tracking
+Requires-Dist: wandb>=0.16; extra == "tracking"
+
+# Supply Chain Shock Simulation
+
+A Deep Reinforcement Learning framework for training autonomous supply chain agents that maintain stability under catastrophic disruptions.
+
+## Architecture
+
+```
+DRL Agent(s) ──actions──▶ SimPy DES Engine ──state/reward──▶ DRL Agent(s)
+                              ▲
+                              │
+                    Shock Injector (demand surges,
+                    supplier outages, logistics delays)
+```
+
+**Key Components:**
+- **SimPy DES Engine** — Stochastic demand, lead times, and resource contention
+- **Shock Injector** — 5 disruption types with probabilistic and deterministic triggering
+- **Composite Reward** — 6-term function with anti-Bullwhip stability penalty
+- **Heuristic Baselines** — Base-Stock, (s,S), Beer Game policies for benchmarking
+
+## Quick Start
+
+```bash
+# Install dependencies
+pip install -e ".[dev]"
+
+# Run tests
+pytest tests/ -v
+
+# Train the agent (500K steps, ~10 min on CPU)
+python scripts/train.py
+
+# Evaluate against baselines
+python scripts/evaluate.py --model outputs/models/final_model.zip
+
+# Monitor training
+tensorboard --logdir outputs/logs
+```
+
+## Project Structure
+
+```
+├── configs/
+│   ├── default.yaml          # Environment, reward, training hyperparameters
+│   └── shocks.yaml           # Shock catalog and scenario presets
+├── src/
+│   ├── environment/
+│   │   ├── des_engine.py     # Core SimPy simulation
+│   │   ├── supply_chain_env.py  # Gymnasium wrapper
+│   │   └── shock_injector.py    # Disruption event manager
+│   ├── agents/
+│   │   ├── single_agent.py   # PPO trainer (Stable Baselines3)
+│   │   └── heuristic_baselines.py  # Classical policies
+│   ├── rewards/
+│   │   └── composite_reward.py  # Multi-term reward function
+│   ├── scenarios/
+│   │   └── monte_carlo.py    # What-if scenario analysis
+│   └── utils/
+│       ├── config_loader.py  # YAML config parser
+│       └── visualization.py  # Analysis plots
+├── scripts/
+│   ├── train.py              # Training entry point
+│   └── evaluate.py           # Evaluation entry point
+└── tests/
+    ├── test_env.py
+    ├── test_shocks.py
+    └── test_reward.py
+```
+
+## Scenario Presets
+
+Run deterministic shock scenarios:
+
+```bash
+# No shocks (baseline)
+python scripts/train.py --shock-mode deterministic --scenario calm
+
+# Supplier outage then demand surge
+python scripts/train.py --shock-mode deterministic --scenario cascading_crisis
+
+# All shocks at 3x probability
+python scripts/train.py --shock-mode stochastic --scenario worst_case
+```
