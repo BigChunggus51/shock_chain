@@ -7,3 +7,5 @@ simpy==4.1.1
 numpy==1.26.4
 pandas==2.2.1
 pydantic==2.6.4
+torch>=2.5.0
+torchvision>=0.20.0
